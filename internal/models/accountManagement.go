@@ -12,5 +12,5 @@ type Account struct {
     Balance   float64            `bson:"balance"`
     Currency  string             `bson:"currency"`
     CreatedAt time.Time          `bson:"created_at"`
-    UpdatedAt time.Time          `bson:"updated_at"`
+    UpdatedAt time.Time          `bson:"updated_at"` 
 }
