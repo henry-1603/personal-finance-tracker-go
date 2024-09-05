@@ -41,7 +41,7 @@ func main() {
     mux.HandleFunc("/expenses/user", methodHandler(handlers.GetExpensesByUser, "GET"))
     mux.HandleFunc("/categories", methodHandler(handlers.GetExpenseCategories, "GET"))
     mux.HandleFunc("/budgets/expense", methodHandler(handlers.SetExpenseLimit, "POST"))
-
+ 
     log.Println("Server running on http://localhost:8080")
     log.Fatal(http.ListenAndServe(":8080", mux))
 }
