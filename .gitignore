@@ -1,6 +1,6 @@
 # .gitignore
-/bin/
-/pkg/
-/vendor/
-*.log
-*.env
+/bin
+/pkg
+/vendor
+.log
+.env
