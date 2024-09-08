@@ -43,6 +43,22 @@ func main() {
 	mux.HandleFunc("/categories", methodHandler(handlers.GetExpenseCategories, "GET"))
 	mux.HandleFunc("/budgets/expense", methodHandler(handlers.SetExpenseLimit, "POST"))
 
+
+	// income
+    mux.HandleFunc("/income/user", methodHandler(handlers.GetIncomeByUser, "GET"))
+	mux.HandleFunc("/income/create", methodHandler(handlers.CreateIncome, "POST"))
+    mux.HandleFunc("/income/update", methodHandler(handlers.UpdateIncome, "PUT"))
+    mux.HandleFunc("/income/delete", methodHandler(handlers.DeleteIncome, "DELETE"))
+
+
+	// recurring transactions
+	mux.HandleFunc("/api/recurrTransac/create", methodHandler(handlers.CreateRecurringTransaction, "POST"))
+    mux.HandleFunc("/api/recurrTransac/update", methodHandler(handlers.UpdateRecurringTransaction, "PUT"))
+    mux.HandleFunc("/api/recurrTransac/delete", methodHandler(handlers.DeleteRecurringTransaction, "DELETE"))
+    mux.HandleFunc("/api/recurrTransac/user", methodHandler(handlers.GetRecurringTransactionsByUser, "GET"))
+
+
+
 	log.Println("Server running on http://localhost:8080")
 	log.Fatal(http.ListenAndServe(":8080", mux))
 }
