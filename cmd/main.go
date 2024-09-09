@@ -9,6 +9,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
+
 func init() {
 	err := godotenv.Load()
 	if err != nil {
@@ -56,6 +57,13 @@ func main() {
     mux.HandleFunc("/api/recurrTransac/update", methodHandler(handlers.UpdateRecurringTransaction, "PUT"))
     mux.HandleFunc("/api/recurrTransac/delete", methodHandler(handlers.DeleteRecurringTransaction, "DELETE"))
     mux.HandleFunc("/api/recurrTransac/user", methodHandler(handlers.GetRecurringTransactionsByUser, "GET"))
+
+
+	// Account handlers
+	mux.HandleFunc("/api/accounts/create", methodHandler(handlers.CreateAccount, "POST"))
+	mux.HandleFunc("/api/accounts/update", methodHandler(handlers.UpdateAccount, "PUT"))
+	mux.HandleFunc("/api/accounts/delete", methodHandler(handlers.DeleteAccount, "DELETE"))
+	mux.HandleFunc("/api/accounts/user", methodHandler(handlers.GetAccountsByUser, "GET"))
 
 
 

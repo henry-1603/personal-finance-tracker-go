@@ -5,7 +5,7 @@ import (
     "time"
 )
 
-type Account struct {
+type AccountManagement struct {
     ID        primitive.ObjectID `bson:"_id,omitempty"`
     UserID    primitive.ObjectID `bson:"user_id"`
     AccountType string           `bson:"account_type"` // e.g., "checking", "savings"
