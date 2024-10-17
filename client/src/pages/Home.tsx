@@ -1,30 +1,45 @@
-import React from "react";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
-const Home: React.FC = () => {
+function Home() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token"); // Assuming the token is stored here after login
+    if (token) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, []);
+
   return (
-    <div className="p-6 max-w-xl mx-auto bg-white rounded-lg shadow-md">
-      <h1 className="text-3xl font-bold mb-4">Welcome to Your Personal Finance Tracker</h1>
-      <p className="mb-4">Manage your expenses, income, budgets, and more!</p>
-      <div className="space-y-2">
-        <Link to="/recurring-transactions" className="block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-          View Recurring Transactions
-        </Link>
-        <Link to="/expenses" className="block bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-          Manage Expenses
-        </Link>
-        <Link to="/income" className="block bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
-          Manage Income
-        </Link>
-        <Link to="/budgets" className="block bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded">
-          Manage Budgets
-        </Link>
-        <Link to="/accounts" className="block bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-          Manage Accounts
-        </Link>
+    <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center">
+      <h1 className="text-4xl font-bold mb-8">Welcome to the Personal Finance Tracker!</h1>
+      <div className="space-y-4">
+        {!isLoggedIn ? (
+          <>
+            <Link to="/login">
+              <button className="px-6 py-2 bg-blue-500 text-gray rounded hover:bg-blue-600">
+                Login
+              </button>
+            </Link>
+            <Link to="/register">
+              <button className="px-6 py-2 bg-green text-gray rounded hover:bg-green-600">
+                Register
+              </button>
+            </Link>
+          </>
+        ) : (
+          <Link to="/dashboard">
+            <button className="px-6 py-2 bg-purple-500 text-white rounded hover:bg-purple-600">
+              Go to Dashboard
+            </button>
+          </Link>
+        )}
       </div>
     </div>
   );
-};
+}
 
 export default Home;

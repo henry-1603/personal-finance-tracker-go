@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link , useNavigate } from 'react-router-dom';
 // import { getBudgets, getExpenses, getIncome } from '../api'; // Assume these functions are defined in your API layer
 
 
@@ -14,6 +14,14 @@ const Dashboard = () => {
   const [totalIncome, setTotalIncome] = useState(0);
   const [totalExpenses, setTotalExpenses] = useState(0);
   const [budgets, setBudgets] = useState<budgets[]>([]);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // Clear local storage
+    localStorage.removeItem('token');
+    // Redirect to login page
+    navigate('/login');
+  };
 
 //   useEffect(() => {
 //     const fetchData = async () => {
@@ -39,6 +47,12 @@ const Dashboard = () => {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+      <button 
+        onClick={handleLogout} 
+        className="bg-red-500 text-gray px-4 py-2 rounded mb-4"
+      >
+        Logout
+      </button>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <div className="bg-white p-4 rounded shadow">
           <h2 className="text-xl font-semibold">Total Income</h2>
