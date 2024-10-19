@@ -3,6 +3,9 @@ import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import BudgetsPage from "./pages/BudgetsPage";
 import AccountsPage from "./pages/AccountsPage";
+import AccountCreate from "./component/Account/AccountCreate";
+
+
 import Expenses from "./pages/ExpensePage";
 import IncomesPage from "./pages/IncomesPage";
 import RecurringTransactionsPage from "./pages/RecurringTransactionsPage";
@@ -20,7 +23,12 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/budgets" element={<BudgetsPage />} />
+
+        {/* Account routes */}
         <Route path="/accounts" element={<AccountsPage />} />
+        <Route path="/accounts/create" element={<AccountCreate />} />
+
+
         <Route path="/expenses" element={<Expenses />} />
         <Route path="/incomes" element={<IncomesPage />} />
         <Route path="/recurring-transactions" element={<RecurringTransactionsPage />} />

@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Link , useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 // import { getBudgets, getExpenses, getIncome } from '../api'; // Assume these functions are defined in your API layer
-
 
 interface budgets {
     id: number;
     category: string;
     limit: number;
 }
-
 
 const Dashboard = () => {
   const [totalIncome, setTotalIncome] = useState(0);
@@ -78,6 +76,7 @@ const Dashboard = () => {
         <Link to="/budgets" className="text-blue-500 underline">Manage Budgets</Link>
         <Link to="/expenses" className="text-blue-500 underline ml-4">View Expenses</Link>
         <Link to="/incomes" className="text-blue-500 underline ml-4">View Incomes</Link>
+        <Link to="/accounts" className="text-blue-500 underline ml-4">Manage Accounts</Link> {/* Added Accounts Link */}
       </div>
     </div>
   );

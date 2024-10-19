@@ -58,7 +58,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
     }
 
     // Generate a token after user creation
-    token, err := generateToken(user.Username)
+    token, err := generateToken(user)
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
@@ -116,7 +116,7 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
     }
 
     // Generate a token
-    token, err := generateToken(dbUser.Username)
+    token, err := generateToken(dbUser)
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
@@ -140,11 +140,16 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 
 
 // Function to generate JWT token
-func generateToken(username string) (string, error) {
-	claims := jwt.MapClaims{
-		"username": username,
-		"exp":      time.Now().Add(time.Hour * 24).Unix(), // Token expiration time
-	}
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(jwtSecret)
+func generateToken(user models.User) (string, error) {
+    claims := jwt.MapClaims{
+        "id":        user.ID.Hex(),          // Store the user ID as a string
+        "username":  user.Username,          // Include username
+        "email":     user.Email,             // Include email
+        "createdAt": user.CreatedAt,         // Include creation timestamp
+        "updatedAt": user.UpdatedAt,         // Include update timestamp
+        "exp":       time.Now().Add(time.Hour * 24).Unix(), // Token expiration time (24 hours)
+    }
+
+    token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+    return token.SignedString(jwtSecret)
 }
