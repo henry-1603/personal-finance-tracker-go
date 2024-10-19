@@ -1,16 +1,30 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import BudgetList from '../component/Budget/BudgetList'; // Adjust the import based on your file structure
+import { Link } from 'react-router-dom'; // Import Link to handle navigation
 
-const Budgets: React.FC = () => {
+const BudgetsPage = () => {
   return (
     <div className="p-6 max-w-xl mx-auto bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-4">Manage Budgets</h2>
-      <Link to="/budgets/create" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        Add Budget
-      </Link>
-      {/* Additional code to display budgets goes here */}
+      <h1 className="text-2xl font-bold mb-4">Your Budgets</h1>
+
+      <BudgetList />
+
+      {/* Add Budget Button */}
+      <div className="mt-6 flex justify-between">
+        <Link
+          to="/dashboard"
+          className="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded"
+        >
+          Back to Dashboard
+        </Link>
+        <Link
+          to="/budgets/create"
+          className="bg-blue-500 hover:bg-blue-700 text-gray font-bold py-2 px-4 rounded"
+        >
+          Add Budget
+        </Link>
+      </div>
     </div>
   );
 };
 
-export default Budgets;
+export default BudgetsPage;

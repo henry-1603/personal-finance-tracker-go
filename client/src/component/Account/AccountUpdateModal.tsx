@@ -54,7 +54,7 @@ const AccountUpdateModal: React.FC<Props> = ({ account, onClose, onUpdate }) => 
           <div className="mb-4">
             <label className="block text-sm font-medium">Balance</label>
             <input
-              type="number"
+              type="tel"
               value={formData.balance}
               onChange={(e) => setFormData({ ...formData, balance: parseFloat(e.target.value) })}
               className="mt-1 block w-full p-2 border rounded"

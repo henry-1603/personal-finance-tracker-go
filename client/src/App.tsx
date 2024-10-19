@@ -1,7 +1,11 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
+
+
 import BudgetsPage from "./pages/BudgetsPage";
+import BudgetsCreate from "./component/Budget/BudgetCreate"
+
 import AccountsPage from "./pages/AccountsPage";
 import AccountCreate from "./component/Account/AccountCreate";
 
@@ -22,7 +26,10 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<Dashboard />} />
+
+        {/* Budgets */}
         <Route path="/budgets" element={<BudgetsPage />} />
+        <Route path="/budgets/create" element={<BudgetsCreate />} />
 
         {/* Account routes */}
         <Route path="/accounts" element={<AccountsPage />} />
