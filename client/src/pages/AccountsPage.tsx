@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 import AccountList from '../component/Account/AccountList'; // Assuming Accounts component is in the components folder
 import { Link } from 'react-router-dom'; // Import Link to handle navigation
 
