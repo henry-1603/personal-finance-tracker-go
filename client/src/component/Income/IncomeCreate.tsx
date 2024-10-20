@@ -1,14 +1,56 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { jwtDecode } from "jwt-decode"; // Import jwtDecode to decode the token
 
 const IncomeCreate = () => {
   const [source, setSource] = useState("");
   const [amount, setAmount] = useState(0);
   const [description, setDescription] = useState("");
+  const navigate = useNavigate(); // Initialize the navigate function
+  const [, setError] = useState<string | null>(null); // State to manage error messages
+
+  const token = localStorage.getItem("token"); // Get the token from local storage
+    let userId: string | null = null;
+
+    // Decode the token to get the user ID
+    if (token) {
+      const decoded: { id: string } = jwtDecode(token);
+      userId = decoded.id;
+    }
+
+    if (!userId) {
+      setError("User ID is required.");
+      return;
+    }
 
   const handleCreateIncome = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Add logic to create income here
-    console.log("Create Income:", { source, amount, description });
+
+    const newIncome = {
+      userId: userId, // Replace with dynamic user ID
+      source,
+      amount,
+      description,
+    };
+
+    try {
+      const response = await fetch("http://localhost:8080/income/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newIncome),
+      });
+
+      if (response.ok) {
+        // Navigate back to dashboard after successful creation
+        navigate("/incomes");
+      } else {
+        console.error("Failed to create income:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error creating income:", error);
+    }
   };
 
   return (
@@ -27,7 +69,7 @@ const IncomeCreate = () => {
         <div className="mb-4">
           <label className="block text-gray-700">Amount:</label>
           <input
-            type="number"
+            type="tel"
             className="mt-1 p-2 w-full border rounded-md"
             value={amount}
             onChange={(e) => setAmount(Number(e.target.value))}
@@ -44,7 +86,7 @@ const IncomeCreate = () => {
         </div>
         <button
           type="submit"
-          className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="w-full bg-blue-500 hover:bg-blue-700 text-gray font-bold py-2 px-4 rounded"
         >
           Submit
         </button>

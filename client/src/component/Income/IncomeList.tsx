@@ -1,39 +1,121 @@
 import { useEffect, useState } from "react";
+import IncomeUpdateModal from "./IncomeUpdateModal";
+import { jwtDecode } from "jwt-decode"; // Corrected import for jwtDecode
 
-
-interface incomes {
-    id: number;
-    source: string;
-    amount: number;
-    description: string;
+interface Income {
+  ID: string;
+  Source: string;
+  Amount: number;
+  Description: string;
+  Date?: Date; // Make Date optional
 }
 
 const IncomeList = () => {
-  const [incomes, setIncomes] = useState<incomes[]>([]);
+  const [incomes, setIncomes] = useState<Income[]>([]);
+  const [selectedIncome, setSelectedIncome] = useState<Income | null>(null);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [, setError] = useState<string | null>(null);
+
+  const token = localStorage.getItem("token");
+  let userId: string | null = null;
+
+  if (token) {
+    const decoded: { id: string } = jwtDecode(token);
+    userId = decoded.id;
+  }
+
+  if (!userId) {
+    setError("User ID is required.");
+    return null; // Return null if no user ID
+  }
 
   useEffect(() => {
-    // Fetch incomes for the user
     const fetchIncomes = async () => {
-      // Add API call here
-      const incomes = [
-        { id: 1, source: "Salary", amount: 2000, description: "Monthly salary" },
-        { id: 2, source: "Freelance", amount: 500, description: "Project work" },
-      ];
-      setIncomes(incomes);
+      try {
+        const response = await fetch(
+          `http://localhost:8080/income/user?user_id=${userId}`
+        );
+        const data = await response.json();
+        setIncomes(data);
+      } catch (error) {
+        console.error("Error fetching incomes:", error);
+      }
     };
     fetchIncomes();
-  }, []);
+  }, [userId]);
+
+  const handleDeleteIncome = async (incomeId: string) => {
+    if (window.confirm("Are you sure you want to delete this income?")) {
+      try {
+        await fetch(`http://localhost:8080/income/delete?id=${incomeId}`, {
+          method: "DELETE",
+        });
+        setIncomes(incomes.filter((income) => income.ID !== incomeId));
+      } catch (error) {
+        console.error("Error deleting income:", error);
+      }
+    }
+  };
+
+  const openUpdateModal = (income: Income) => {
+    console.log("hello");
+    setSelectedIncome(income);
+    setIsUpdateModalOpen(true);
+  console.log(isUpdateModalOpen,selectedIncome);
+
+  };
+
+  const closeUpdateModal = () => {
+    setIsUpdateModalOpen(false);
+    setSelectedIncome(null);
+  };
+
+  const handleUpdate = (updatedIncome: Income) => {
+    setIncomes((prev) =>
+      prev.map((income) =>
+        income.ID === updatedIncome.ID ? updatedIncome : income
+      )
+    );
+  };
 
   return (
     <div className="p-6 max-w-2xl mx-auto bg-white rounded-lg shadow-md">
-      <h2 className="text-xl font-bold mb-4">Your Incomes</h2>
-      <ul>
-        {incomes.map((income) => (
-          <li key={income.id} className="mb-2">
-            <span className="font-bold">{income.source}</span>: ${income.amount} - {income.description}
-          </li>
-        ))}
-      </ul>
+      {incomes.length === 0 ? (
+        <p>No incomes found.</p>
+      ) : (
+        <ul>
+          {incomes.map((income) => (
+            <li key={income.ID} className="flex justify-between mb-2">
+              <span>{income.Source}</span>: ${income.Amount} (
+              {income.Description})
+              <button
+                onClick={() => openUpdateModal(income)}
+                className="bg-yellow-500 text-white px-2 py-1 rounded mr-2"
+              >
+                Update
+              </button>
+              <button
+                onClick={() => handleDeleteIncome(income.ID)}
+                className="bg-red-500 text-white px-2 py-1 rounded"
+              >
+                Delete
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+
+{isUpdateModalOpen && selectedIncome && (
+  <>
+    {console.log("Rendering Modal")}
+    <IncomeUpdateModal
+      income={selectedIncome}
+      onClose={closeUpdateModal}
+      onUpdate={handleUpdate}
+    />
+  </>
+)}
+
     </div>
   );
 };

@@ -11,7 +11,11 @@ import AccountCreate from "./component/Account/AccountCreate";
 
 
 import Expenses from "./pages/ExpensePage";
+
+
 import IncomesPage from "./pages/IncomesPage";
+import IncomeCreate from "./component/Income/IncomeCreate";
+
 import RecurringTransactionsPage from "./pages/RecurringTransactionsPage";
 import Login from "./component/User/Login";
 import Register from "./component/User/Register";
@@ -37,7 +41,12 @@ function App() {
 
 
         <Route path="/expenses" element={<Expenses />} />
+
+        {/* Incomes */}
         <Route path="/incomes" element={<IncomesPage />} />
+        <Route path="/incomes/create" element={<IncomeCreate />} />
+
+
         <Route path="/recurring-transactions" element={<RecurringTransactionsPage />} />
         <Route path="*" element={<NotFound />} />
 
