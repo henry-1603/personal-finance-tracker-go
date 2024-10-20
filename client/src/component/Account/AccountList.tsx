@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "../axiosConfig"; // Ensure axios is configured for API requests
 import { jwtDecode } from "jwt-decode"; // Correct import
 import AccountUpdateModal from './AccountUpdateModal'; // Import the modal
+import "../../assets/css/updateModal.css"
 
 interface Account {
   id: string;

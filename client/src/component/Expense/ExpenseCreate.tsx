@@ -1,14 +1,60 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
+import { jwtDecode } from "jwt-decode";
 
-const ExpenseCreate = () => {
+const ExpenseCreate: React.FC = () => {
   const [category, setCategory] = useState("");
   const [amount, setAmount] = useState(0);
   const [description, setDescription] = useState("");
+  const navigate = useNavigate(); // Hook for navigation
 
   const handleCreateExpense = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Add logic to create expense here
-    console.log("Create Expense:", { category, amount, description });
+
+    const token = localStorage.getItem("token");
+    let userId: string | null = null;
+
+    // Decode the token to get the user ID
+    if (token) {
+      const decoded: { id: string } = jwtDecode(token); // Assuming jwtDecode is already imported
+      userId = decoded.id;
+    }
+
+    if (!userId) {
+      alert("User ID is required.");
+      return;
+    }
+
+    const expenseData = {
+      user_id: userId,
+      category,
+      amount,
+      description,
+    };
+
+    try {
+      const response = await fetch("http://localhost:8080/expense/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          
+        },
+        body: JSON.stringify(expenseData),
+      });
+
+      if (response.ok) {
+        // Redirect or show success message
+        alert("Expense created successfully!");
+        navigate("/expenses"); // Redirect to the expenses list
+      } else {
+        const errorData = await response.json();
+        console.error("Error creating expense:", errorData);
+        alert("Failed to create expense. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error creating expense:", error);
+      alert("An error occurred. Please try again.");
+    }
   };
 
   return (
@@ -27,7 +73,7 @@ const ExpenseCreate = () => {
         <div className="mb-4">
           <label className="block text-gray-700">Amount:</label>
           <input
-            type="number"
+            type="tel"
             className="mt-1 p-2 w-full border rounded-md"
             value={amount}
             onChange={(e) => setAmount(Number(e.target.value))}

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"finance-tracker/config"
 	"finance-tracker/internal/models"
+	"log"
 	"net/http"
 	"time"
 
@@ -12,19 +13,41 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+type CreateExpenseRequest struct {
+	Category    string  `json:"category"`
+	Amount      float64 `json:"amount"`
+	Description string  `json:"description,omitempty"`
+	UserID      string  `json:"user_id"` // Add UserID field to match the body structure
+}
+
 func CreateExpense(w http.ResponseWriter, r *http.Request) {
-	var expense models.Expense
-	if err := json.NewDecoder(r.Body).Decode(&expense); err != nil {
+	var req CreateExpenseRequest
+
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "Invalid input", http.StatusBadRequest)
 		return
 	}
 
-	expense.ID = primitive.NewObjectID()
-	expense.UserID, _ = primitive.ObjectIDFromHex(r.Header.Get("user_id")) // Assuming user_id is passed in the header
-	expense.Date = time.Now()
+	expense := models.Expense{
+		ID:          primitive.NewObjectID(),
+		Category:    req.Category,
+		Amount:      req.Amount,
+		Description: req.Description,
+		Date:        time.Now(),
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
+	}
+
+	// Convert UserID from string to ObjectID
+	var err error
+	expense.UserID, err = primitive.ObjectIDFromHex(req.UserID)
+	if err != nil {
+		http.Error(w, "Invalid User ID format", http.StatusBadRequest)
+		return
+	}
 
 	collection := config.DB.Collection("expenses")
-	_, err := collection.InsertOne(context.TODO(), expense)
+	_, err = collection.InsertOne(context.TODO(), expense)
 	if err != nil {
 		http.Error(w, "Failed to create expense", http.StatusInternalServerError)
 		return
@@ -34,36 +57,76 @@ func CreateExpense(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(expense)
 }
 
+
 func UpdateExpense(w http.ResponseWriter, r *http.Request) {
-	var expense models.Expense
-	if err := json.NewDecoder(r.Body).Decode(&expense); err != nil {
-		http.Error(w, "Invalid input", http.StatusBadRequest)
+	id := r.URL.Query().Get("expense_id")
+	if id == "" {
+		http.Error(w, "Expense ID is required", http.StatusBadRequest)
 		return
 	}
 
-	expenseID := r.URL.Query().Get("expense_id")
-	expenseIDObj, err := primitive.ObjectIDFromHex(expenseID)
+	expenseID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		http.Error(w, "Invalid Expense ID", http.StatusBadRequest)
 		return
 	}
 
-	filter := bson.M{"_id": expenseIDObj}
-	update := bson.M{"$set": expense}
+	var updatedExpense models.Expense
+	if err := json.NewDecoder(r.Body).Decode(&updatedExpense); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	updateFields := bson.M{}
+	if updatedExpense.Category != "" {
+		updateFields["category"] = updatedExpense.Category
+	}
+	if updatedExpense.Amount != 0 {
+		updateFields["amount"] = updatedExpense.Amount
+	}
+	if !updatedExpense.Date.IsZero() {
+		updateFields["date"] = updatedExpense.Date
+	}
+	if updatedExpense.Description != "" {
+		updateFields["description"] = updatedExpense.Description
+	}
+
+	if len(updateFields) == 0 {
+		http.Error(w, "No fields to update", http.StatusBadRequest)
+		return
+	}
 
 	collection := config.DB.Collection("expenses")
-	_, err = collection.UpdateOne(context.TODO(), filter, update)
+	filter := bson.M{"_id": expenseID}
+	update := bson.M{"$set": updateFields}
+
+	result, err := collection.UpdateOne(context.TODO(), filter, update)
 	if err != nil {
-		http.Error(w, "Failed to update expense", http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if result.MatchedCount == 0 {
+		http.Error(w, "Expense not found", http.StatusNotFound)
+		return
+	}
+
+	// Optionally retrieve and return the updated record
+	var updatedRecord models.Expense
+	err = collection.FindOne(context.TODO(), filter).Decode(&updatedRecord)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("Expense updated successfully"))
+	json.NewEncoder(w).Encode(updatedRecord)
 }
+
 
 func DeleteExpense(w http.ResponseWriter, r *http.Request) {
 	expenseID := r.URL.Query().Get("expense_id")
+	log.Println(expenseID)
 	expenseIDObj, err := primitive.ObjectIDFromHex(expenseID)
 	if err != nil {
 		http.Error(w, "Invalid Expense ID", http.StatusBadRequest)
@@ -84,37 +147,40 @@ func DeleteExpense(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetExpensesByUser(w http.ResponseWriter, r *http.Request) {
-	userID := r.Header.Get("user_id")
-	userIDObj, err := primitive.ObjectIDFromHex(userID)
-	if err != nil {
-		http.Error(w, "Invalid User ID", http.StatusBadRequest)
-		return
-	}
+    // Get user_id from query parameters
+    userID := r.URL.Query().Get("user_id")
+    userIDObj, err := primitive.ObjectIDFromHex(userID)
+    if err != nil {
+        http.Error(w, "Invalid User ID", http.StatusBadRequest)
+        return
+    }
 
-	category := r.URL.Query().Get("category") // Optional filter by category
+    category := r.URL.Query().Get("category") // Optional filter by category
 
-	filter := bson.M{"user_id": userIDObj}
-	if category != "" {
-		filter["category"] = category
-	}
+    // Create a filter for MongoDB
+    filter := bson.M{"user_id": userIDObj}
+    if category != "" {
+        filter["category"] = category
+    }
 
-	collection := config.DB.Collection("expenses")
-	cursor, err := collection.Find(context.TODO(), filter)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	defer cursor.Close(context.TODO())
+    collection := config.DB.Collection("expenses")
+    cursor, err := collection.Find(context.TODO(), filter)
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+    }
+    defer cursor.Close(context.TODO())
 
-	var expenses []models.Expense
-	if err := cursor.All(context.TODO(), &expenses); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+    var expenses []models.Expense
+    if err := cursor.All(context.TODO(), &expenses); err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+    }
 
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(expenses)
+    w.WriteHeader(http.StatusOK)
+    json.NewEncoder(w).Encode(expenses)
 }
+
 
 func GetExpenseCategories(w http.ResponseWriter, r *http.Request) {
 	userID := r.Header.Get("user_id")

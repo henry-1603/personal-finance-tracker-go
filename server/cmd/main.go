@@ -42,9 +42,10 @@ func main() {
 	mux.HandleFunc("/api/budgets/delete", methodHandler(handler.DeleteBudget, "DELETE"))
 
 	// Expense routes
-	mux.HandleFunc("/expenses", methodHandler(handler.CreateExpense, "POST"))
-	mux.HandleFunc("/expenses/", methodHandler(handler.DeleteExpense, "DELETE")) // Note the trailing slash
+	mux.HandleFunc("/expense/create", methodHandler(handler.CreateExpense, "POST"))
+	mux.HandleFunc("/expense/delete", methodHandler(handler.DeleteExpense, "DELETE")) // Note the trailing slash
 	mux.HandleFunc("/expenses/user", methodHandler(handler.GetExpensesByUser, "GET"))
+	mux.HandleFunc("/expense/update", methodHandler(handler.UpdateExpense, "PUT"))
 	mux.HandleFunc("/categories", methodHandler(handler.GetExpenseCategories, "GET"))
 	mux.HandleFunc("/budgets/expense", methodHandler(handler.SetExpenseLimit, "POST"))
 

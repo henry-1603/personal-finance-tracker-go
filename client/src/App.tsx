@@ -11,7 +11,7 @@ import AccountCreate from "./component/Account/AccountCreate";
 
 
 import Expenses from "./pages/ExpensePage";
-
+import ExpenseCreate from "./component/Expense/ExpenseCreate";
 
 import IncomesPage from "./pages/IncomesPage";
 import IncomeCreate from "./component/Income/IncomeCreate";
@@ -39,8 +39,9 @@ function App() {
         <Route path="/accounts" element={<AccountsPage />} />
         <Route path="/accounts/create" element={<AccountCreate />} />
 
-
+        {/* Expense  */}
         <Route path="/expenses" element={<Expenses />} />
+        <Route path="/expenses/create" element={<ExpenseCreate />} />
 
         {/* Incomes */}
         <Route path="/incomes" element={<IncomesPage />} />
