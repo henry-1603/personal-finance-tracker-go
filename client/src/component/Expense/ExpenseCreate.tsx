@@ -57,7 +57,13 @@ const ExpenseCreate: React.FC = () => {
     }
   };
 
+  const handleNavigation = (path: string) => {
+    navigate(path);
+  };
+
   return (
+    <div className='w-[100vw] h-[100vh] bg-[#040F30] p-6'>
+
     <div className="p-6 max-w-sm mx-auto bg-white rounded-lg shadow-md">
       <h2 className="text-xl font-bold mb-4">Create Expense</h2>
       <form onSubmit={handleCreateExpense}>
@@ -88,13 +94,23 @@ const ExpenseCreate: React.FC = () => {
             onChange={(e) => setDescription(e.target.value)}
           />
         </div>
+        <div className="flex justify-between">
+        <button
+              onClick={() => handleNavigation("/expenses")}
+              className="font-bold hover:bg-blue-600 text-red-500 py-2 px-4 rounded transition duration-300"
+            >
+              Cancel
+            </button>
         <button
           type="submit"
-          className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className=" bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         >
           Submit
         </button>
+        
+            </div>
       </form>
+    </div>
     </div>
   );
 };

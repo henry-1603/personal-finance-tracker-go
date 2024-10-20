@@ -97,7 +97,7 @@ const UpdateRecurringTransactionModal: React.FC<ModalProps> = ({ transaction, cl
           <div className="flex justify-between">
             <button
               type="button"
-              className="bg-gray-500 text-white px-4 py-2 rounded"
+              className=" text-red-500 px-4 py-2 rounded"
               onClick={closeModal}
             >
               Cancel

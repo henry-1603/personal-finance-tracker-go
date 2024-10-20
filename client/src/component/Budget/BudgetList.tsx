@@ -76,7 +76,7 @@ const BudgetList = () => {
   };
 
   return (
-    <div className="p-6 max-w-2xl mx-auto bg-gray rounded-lg shadow-md">
+    <div className="p-6 max-w-full mx-auto bg-gray rounded-lg shadow-md">
       {/* <h2 className="text-xl font-bold mb-4">Your Budgets</h2> */}
 
       {/* Display message if no budgets found */}
@@ -86,21 +86,29 @@ const BudgetList = () => {
         <ul>
           {budgets.map((budget) => (
             <li key={budget.ID} className="mb-2 flex justify-between items-center">
-              <span className="font-bold">{budget.Category}</span>: ₹{budget.Limit}
           
+          
+              <span className="flex flex-row space-x-[1rem]">
+              <span className="text-xl font-bold">{budget.Category}  :</span> 
+              <span className="text-xl font-bold"> ₹{budget.Limit} 
+             
+
+              </span>
+              </span>
+            <div>
                 <button
                   onClick={() => openUpdateModal(budget)} // Open update modal
-                  className="bg-yellow-500 hover:bg-yellow-600 text-gray font-bold py-1 px-2 rounded mr-2"
+                  className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-3 rounded mr-2"
                 >
                   Update
                 </button>
                 <button
                   onClick={() => handleDeleteBudget(budget.ID)} // Delete budget
-                  className="bg-red-500 hover:bg-red-600 text-gray font-bold py-1 px-2 rounded"
+                  className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-3 rounded"
                 >
                   Delete
                 </button>
-              
+                </div>
             </li>
           ))}
         </ul>

@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom'; // Import Link to handle navigation
 
 const BudgetsPage = () => {
   return (
-    <div className="p-6 max-w-xl mx-auto bg-white rounded-lg shadow-md">
-      <h1 className="text-2xl font-bold mb-4">Your Incomes</h1>
+    <div className='w-[100vw] h-[100vh] bg-[#040F30] p-6'>
+    <div className="p-6 max-w-[60%] p-6 mx-auto bg-white rounded-lg shadow-md">
+      <h1 className="text-[2rem] w-full font-bold mb-4">Your Incomes</h1>
 
       <IncomeList />
 
@@ -18,11 +19,12 @@ const BudgetsPage = () => {
         </Link>
         <Link
           to="/incomes/create"
-          className="bg-blue-500 hover:bg-blue-700 text-gray font-bold py-2 px-4 rounded"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         >
           Add Income
         </Link>
       </div>
+    </div>
     </div>
   );
 };

@@ -61,11 +61,14 @@ const IncomeUpdateModal = ({ income, onClose, onUpdate }: { income: Income, onCl
               onChange={(e) => setDescription(e.target.value)}
             />
           </div>
+         <div className="flex justify-between">
+        <button onClick={onClose}  className="mt-2 font-bold text-red-500">Cancel</button>
           <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
             Save Changes
           </button>
+        </div>
         </form>
-        <button onClick={onClose} className="mt-2 text-red-500">Cancel</button>
+        
       </div>
     </div>
   );

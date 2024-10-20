@@ -4,7 +4,9 @@ import { Link } from 'react-router-dom'; // Import Link to handle navigation
 
 const AccountsPage = () => {
   return (
-    <div className="p-6 max-w-xl mx-auto bg-white rounded-lg shadow-md">
+    <div className='w-[100vw] h-[100vh] bg-[#040F30] p-6'>
+
+    <div className="p-6 max-w-[60%] mx-auto bg-white rounded-lg shadow-md">
       <h1 className="text-2xl font-bold mb-4">Your Accounts</h1>
 
       {/* Include Accounts component which lists accounts */}
@@ -20,11 +22,12 @@ const AccountsPage = () => {
         </Link>
         <Link
           to="/accounts/create"
-          className="bg-blue-500 hover:bg-blue-700 text-gray font-bold py-2 px-4 rounded"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         >
           Add Account
         </Link>
       </div>
+    </div>
     </div>
   );
 };

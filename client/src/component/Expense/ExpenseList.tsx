@@ -69,7 +69,7 @@ const ExpenseList = () => {
   };
 
   return (
-    <div className="p-6 max-w-2xl mx-auto bg-white rounded-lg shadow-md">
+    <div className="p-6 max-w-full mx-auto bg-white rounded-lg shadow-md">
       {/* <h2 className="text-xl font-bold mb-4">Your Expenses</h2> */}
       {expenses.length === 0 ? ( // Check if expenses are empty
         <p className="text-gray-500">No expenses found.</p> // Message for no expenses
@@ -77,17 +77,25 @@ const ExpenseList = () => {
         <ul>
           {expenses.map(expense => (
             <li key={expense.ID} className="flex justify-between mb-2">
-              <span>{expense.Category}</span>: ${expense.Amount} ({expense.Description})
+              
+
+              <span className="flex flex-row space-x-[2rem]">
+              <span className="text-xl font-bold">{expense.Category}  :</span> 
+              <span className="text-xl font-bold"> ${expense.Amount} (
+              {expense.Description})
+
+              </span>
+              </span>
               <div>
                 <button 
                   onClick={() => openUpdateModal(expense)} 
-                  className="bg-yellow-500 text-white px-2 py-1 rounded mr-2"
+                  className="bg-yellow-500 text-black font-bold px-3 py-2 rounded mr-2"
                 >
                   Update
                 </button>
                 <button 
                   onClick={() => handleDeleteExpense(expense.ID)} 
-                  className="bg-red-500 text-white px-2 py-1 rounded"
+                  className="bg-red-500 text-white font-bold px-3 py-2 rounded"
                 >
                   Delete
                 </button>

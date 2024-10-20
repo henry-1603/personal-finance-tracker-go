@@ -61,13 +61,13 @@ const AccountUpdateModal: React.FC<Props> = ({ account, onClose, onUpdate }) => 
               required
             />
           </div>
-          <div className="flex justify-end">
-            <button type="button" onClick={onClose} className="mr-2 bg-gray-500 hover:bg-gray-600 text-white font-bold py-1 px-2 rounded">
+          <div className="flex justify-between">
+            <button type="button" onClick={onClose} className="mr-2  text-red-500 font-bold py-1 px-2 rounded">
               Cancel
             </button>
             <button 
               type="submit" 
-              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-2 rounded"
+              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-3 rounded"
               disabled={loading} // Disable button while loading
             >
               {loading ? "Updating..." : "Update"}

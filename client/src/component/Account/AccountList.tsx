@@ -72,7 +72,7 @@ const AccountList = () => {
   };
 
   return (
-    <div className="p-6 max-w-2xl mx-auto bg-white rounded-lg shadow-md">
+    <div className="p-6 max-w-full mx-auto bg-white rounded-lg shadow-md">
       <h2 className="text-xl font-bold mb-4">Your Accounts</h2>
       {accounts.length === 0 ? (
         <p className="text-red-500">No accounts found.</p>
@@ -80,19 +80,29 @@ const AccountList = () => {
         <ul>
           {accounts.map((account) => (
             <li key={account.id} className="mb-2 flex justify-between items-center">
-              <span className="font-bold">{account.account_type}</span>: ${account.balance}
+              
+
+              <span className="flex flex-row space-x-[1rem]">
+              <span className="text-xl font-bold">{account.account_type}  :</span> 
+              <span className="text-xl font-bold"> ₹{account.balance} 
+             
+
+              </span>
+              </span>
+              <div className="space-x-4">
               <button
                 onClick={() => openModal(account)}
-                className="bg-yellow-500 hover:bg-yellow-600 text-gray font-bold py-1 px-2 rounded"
+                className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-3 rounded"
               >
                 Update
               </button>
               <button
                 onClick={() => handleDeleteAccount(account.id)}
-                className="bg-red-500 hover:bg-red-600 text-gray font-bold py-1 px-2 rounded"
+                className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-3 rounded"
               >
                 Delete
               </button>
+              </div>
             </li>
           ))}
         </ul>

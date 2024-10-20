@@ -79,27 +79,34 @@ const IncomeList = () => {
   };
 
   return (
-    <div className="p-6 max-w-2xl mx-auto bg-white rounded-lg shadow-md">
+    <div className="p-6 max-w-full-auto bg-white rounded-lg shadow-md">
       {incomes.length === 0 ? (
         <p>No incomes found.</p>
       ) : (
         <ul>
           {incomes.map((income) => (
             <li key={income.ID} className="flex justify-between mb-2">
-              <span>{income.Source}</span>: ${income.Amount} (
+              <span className="flex flex-row space-x-[2rem]">
+              <span className="text-xl font-bold">{income.Source}  :</span> 
+              <span className="text-xl font-bold"> ${income.Amount} (
               {income.Description})
+
+              </span>
+              </span>
+              <div>
               <button
                 onClick={() => openUpdateModal(income)}
-                className="bg-yellow-500 text-white px-2 py-1 rounded mr-2"
+                className="bg-yellow-500 text-black px-3 py-2 font-bold rounded mr-2"
               >
                 Update
               </button>
               <button
                 onClick={() => handleDeleteIncome(income.ID)}
-                className="bg-red-500 text-white px-2 py-1 rounded"
+                className="bg-red-500 text-white px-3 py-2 font-bold rounded"
               >
                 Delete
               </button>
+              </div>
             </li>
           ))}
         </ul>

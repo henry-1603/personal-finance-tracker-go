@@ -50,7 +50,7 @@ const BudgetUpdateModal: React.FC<BudgetUpdateModalProps> = ({ budget, onClose, 
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
+    <div className="fixed inset-0 bg-gray-800 bg-opacity-50  flex justify-center items-center z-50">
       <div className="bg-white rounded-lg shadow-md p-6">
         <h2 className="text-xl font-bold mb-4">Update Budget</h2>
         <form onSubmit={handleUpdateBudget}>
@@ -76,7 +76,7 @@ const BudgetUpdateModal: React.FC<BudgetUpdateModalProps> = ({ budget, onClose, 
             <button
               type="button"
               onClick={onClose}
-              className="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded"
+              className=" text-red-500 font-bold py-2 px-4 rounded"
             >
               Cancel
             </button>

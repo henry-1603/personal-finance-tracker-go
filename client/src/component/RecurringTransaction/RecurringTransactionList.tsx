@@ -3,9 +3,7 @@ import axios from "axios";
 import UpdateRecurringTransactionModal from "./UpdateRecurringTransactionModal";
 import {jwtDecode} from "jwt-decode"; // Correct import
 
-interface TokenPayload {
-  id: string;
-}
+
 interface RecurringTransaction {
   ID: string;
   Type: string;
@@ -19,8 +17,8 @@ const RecurringTransactionList: React.FC = () => {
   const [transactions, setTransactions] = useState<RecurringTransaction[]>([]);
   const [selectedTransaction, setSelectedTransaction] = useState<RecurringTransaction | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [, setLoading] = useState(true);
+  const [, setError] = useState<string | null>(null);
 
   // console.log(userId)
 
@@ -77,7 +75,7 @@ const RecurringTransactionList: React.FC = () => {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl w-full font-bold mb-4">Recurring Transactions</h2>
+
 { transactions.length === 0 ? (
         <p>No recurring transactions found.</p>
       ) : (
@@ -85,11 +83,11 @@ const RecurringTransactionList: React.FC = () => {
           <table className="min-w-full bg-white shadow-md rounded-lg">
             <thead>
               <tr>
-                <th className="py-2 px-4 border-b">Type</th>
-                <th className="py-2 px-4 border-b">Amount</th>
-                <th className="py-2 px-4 border-b">Interval</th>
-                <th className="py-2 px-4 border-b">Next Occurrence</th>
-                <th className="py-2 px-4 border-b">Actions</th>
+                <th className="py-2 px-4 w-[20%] text-left border-b">Type</th>
+                <th className="py-2 px-4 w-[20%] text-left border-b">Amount</th>
+                <th className="py-2 px-4 w-[20%] text-left border-b">Interval</th>
+                <th className="py-2 px-4 w-[20%] text-left border-b">Next Occurrence</th>
+                <th className="py-2 px-4 w-[20%] text-left border-b">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -103,13 +101,13 @@ const RecurringTransactionList: React.FC = () => {
 </td>
                   <td className="py-2 px-4 border-b flex gap-2">
                     <button
-                      className="bg-blue-500 text-white px-3 py-1 rounded"
+                      className="bg-yellow-500 text-black font-bold px-3 py-2 rounded"
                       onClick={() => handleUpdateClick(transaction)}
                     >
                       Update
                     </button>
                     <button
-                      className="bg-red-500 text-white px-3 py-1 rounded"
+                      className="bg-red-500 text-white px-3 py-2  rounded"
                       onClick={() => handleDelete(transaction.ID)}
                     >
                       Delete
