@@ -23,6 +23,13 @@
 
 To set up the project locally, follow these steps:
 
+## env setup
+
+Frontned Client Side env includes
+REACT_APP_API_BASE_URL = <Your localhost backend url>
+
+
+
 ### Backend (Go)
 
 1. Clone the repository:
