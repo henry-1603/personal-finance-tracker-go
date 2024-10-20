@@ -1,13 +1,12 @@
-// index.tsx
-import ReactDOM from "react-dom/client";
-import  App from "./App";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import React from 'react';
+import ReactDOM from 'react-dom/client';  // Ensure this import
+import App from './App';
+import './App.css'; // Or the correct path to your global CSS file
 
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <>
-    <ToastContainer position="top-right" />
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+root.render(
+  <React.StrictMode>
     <App />
-  </>
+  </React.StrictMode>
 );

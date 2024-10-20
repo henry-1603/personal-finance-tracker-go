@@ -1,4 +1,9 @@
-/* COMMON */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
 
 html {
     font-size: 18px;

@@ -21,6 +21,8 @@ import Login from "./component/User/Login";
 import Register from "./component/User/Register";
 import NotFound from "./component/Extra/NotFound";
 
+import './App.css'
+
 
 function App() {
   return (

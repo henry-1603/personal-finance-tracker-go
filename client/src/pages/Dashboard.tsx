@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "../component/axiosConfig"; // Ensure axios is configured for API requests
 import { jwtDecode } from "jwt-decode"; // Import jwtDecode to decode the token
@@ -21,7 +21,7 @@ const Dashboard = () => {
   const [totalIncome, setTotalIncome] = useState(0);
   const [totalExpenses, setTotalExpenses] = useState(0);
   const [budgets, setBudgets] = useState<Budget[]>([]);
-  const [recentTransactions, setRecentTransactions] = useState<Transaction[]>(
+  const [recentTransactions,] = useState<Transaction[]>(
     []
   );
   const navigate = useNavigate();
@@ -63,10 +63,18 @@ const Dashboard = () => {
           );
           setTotalIncome(totalIncome);
 
-          // // Fetch expenses data
-          // const expensesResponse = await axios.get(`http://localhost:8080/api/expenses/user?userId=${userId}`);
-          // const totalExpenses = expensesResponse.data.reduce((acc: number, item: { amount: number }) => acc + item.amount, 0);
-          // setTotalExpenses(totalExpenses);
+          // Fetch expenses data
+          const expensesResponse = await axios.get(`http://localhost:8080/expenses/user?user_id=${userId}`);
+          const totalExpense = expensesResponse.data.reduce(
+            (
+              acc: number,
+              item: {
+                Amount: number;
+              }
+            ) => acc + item.Amount,
+            0
+          );
+          setTotalExpenses(totalExpense);
 
           // Fetch budgets data
           const budgetsResponse = await axios.get(
@@ -87,12 +95,20 @@ const Dashboard = () => {
     fetchData();
   }, []);
 
+  const getBudgetUsageColor = (usage: number) => {
+    console.log("Getting budget usage color from : " + usage);
+    if (usage > 100) return "text-red-600"; // Red
+    if (usage > 75) return "text-orange-600"; // Orange
+    if (usage > 50) return "text-yellow-600"; // Yellow
+    return "text-green-600"; // Green
+  };
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
       <button
         onClick={handleLogout}
-        className="bg-red-500 text-gray px-4 py-2 rounded mb-4"
+        className="bg-red-500 text-red px-4 py-2 rounded mb-4"
       >
         Logout
       </button>
@@ -103,19 +119,18 @@ const Dashboard = () => {
         </div>
         <div className="bg-white p-4 rounded shadow">
           <h2 className="text-xl font-semibold">Total Expenses</h2>
-          {/* <p className="text-2xl font-bold">₹{totalExpenses.toFixed(2)}</p> */}
+          <p className="text-2xl font-bold">₹{totalExpenses.toFixed(2)}</p>
         </div>
         <div className="bg-white p-4 rounded shadow">
           <h2 className="text-xl font-semibold">Budgets</h2>
           <ul>
             {budgets.map((budget) => {
-              // Make sure to use the correct property names
               const budgetUsage =
                 totalExpenses > 0 ? (totalExpenses / budget.Limit) * 100 : 0;
               return (
                 <li key={budget.id} className="flex justify-between">
-                  <span>{budget.Category} : </span>
-                  <span>
+                  <span>{budget.Category} :</span>
+                  <span className={getBudgetUsageColor(budgetUsage)}>
                     ₹{budget.Limit.toFixed(2)} ({budgetUsage.toFixed(2)}% used)
                   </span>
                 </li>
@@ -130,7 +145,7 @@ const Dashboard = () => {
               <li key={transaction.id} className="flex justify-between">
                 <span>{transaction.description}</span>
                 <span>
-                  ${transaction.amount.toFixed(2)} ({transaction.type})
+                  ₹{transaction.amount.toFixed(2)} ({transaction.type})
                 </span>
               </li>
             ))}
@@ -138,7 +153,7 @@ const Dashboard = () => {
         </div>
       </div>
       <div className="mt-6">
-        <Link to="/budgets" className="text-blue-500 underline">
+        <Link to="/budgets" className="text-gray-500 underline">
           Manage Budgets
         </Link>
         <Link to="/expenses" className="text-blue-500 underline ml-4">
